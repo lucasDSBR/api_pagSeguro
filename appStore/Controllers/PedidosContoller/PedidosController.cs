@@ -1,4 +1,4 @@
-using appStore.Models;
+using appStore.Models.PedidosModel;
 using appStore.Services;
 using appStore.Services.PagSeguroService;
 using appStore.Interfaces.PagSeguroInterfaceService;
@@ -12,10 +12,10 @@ namespace appStore.Controllers
 
 	public class PedidosController : ControllerBase
 	{
-		private readonly ILogger<PedidosController> _logger;
+		private readonly ILogger<PagamentosController> _logger;
         private readonly IPagSerguroInterfaceService _pagSeguroService;
         public PedidosController(
-            ILogger<PedidosController> logger,
+            ILogger<PagamentosController> logger,
             IPagSerguroInterfaceService pagSeguroService
            )
         {

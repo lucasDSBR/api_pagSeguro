@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace appStore.Models
+namespace appStore.Models.PedidosModel
 {
 	[Table("Pedidos")]
 	public class PedidoModel
