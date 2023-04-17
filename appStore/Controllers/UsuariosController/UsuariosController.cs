@@ -1,30 +1,32 @@
-using appStore.Models.PedidosModel;
+﻿using appStore.Models.PedidosModel;
 using appStore.Services;
 using appStore.Services.PagSeguroService;
-using appStore.Interfaces.PagSeguroInterfaceService;
+using appStore.Interfaces.UsuariosInterfaceService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using appStore.Models.PedidosPagSegModel;
+using appStore.Services.UsuariosService;
+using appStore.Models.UsuarioModel;
 
 namespace appStore.Controllers
 {
     [ApiController]
-	[Route("/api/[controller]")]
+    [Route("/api/[controller]")]
 
-	public class PedidosController : ControllerBase
-	{
-		private readonly ILogger<PagamentosController> _logger;
-        private readonly IPedidosInterfaceService _pedidosService;
-        public PedidosController(
-            ILogger<PagamentosController> logger,
-            IPedidosInterfaceService pedidosService
+    public class UsuariosController : ControllerBase
+    {
+        private readonly ILogger<UsuariosController> _logger;
+        private readonly IUsuariosInterfaceService _usuariosService;
+        public UsuariosController(
+            ILogger<UsuariosController> logger,
+            IUsuariosInterfaceService usuariosService
            )
         {
             _logger = logger;
-            _pedidosService = pedidosService;
+            _usuariosService  = usuariosService;
         }
 
-        [HttpGet("consultarpedido/{id}")]
+        [HttpGet("consultarusuario/{id}")]
         public IEnumerable<PedidoPagSegModel> Get(string id)
         {
             try
@@ -39,12 +41,12 @@ namespace appStore.Controllers
             return null;
         }
 
-		[HttpPost("gerarpedido")]
-        public IEnumerable<PedidoPagSegModel> Post([FromBody] PedidoPagSegModel pedidoData)
+        [HttpPost("cadastrarusuario")]
+        public IEnumerable<PedidoPagSegModel> Post([FromBody] UsuarioModel usuario)
         {
             try
             {
-                var result = _pedidosService.GerarPedido(pedidoData);
+                var result = _usuariosService.CadastrarUsuario(usuario);
             }
             catch (ArgumentException ex)
             {
@@ -53,5 +55,5 @@ namespace appStore.Controllers
             }
             return null;
         }
-	}
+    }
 }

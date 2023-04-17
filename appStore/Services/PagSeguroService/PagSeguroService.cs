@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System;
 using System.Net.Http;
-using appStore.Models.PedidosModel;
-using appStore.Models.PagamentoModel;
+using appStore.Models.PedidosPagSegModel;
+using appStore.Models.PagamentoPagSegModel;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
@@ -17,20 +17,20 @@ namespace appStore.Services.PagSeguroService
         static HttpClient client = new HttpClient();
 
 
-        private readonly ILogger<PedidoService> _logger;
-        public PagSeguroService(ILogger<PedidoService> logger)
+        private readonly ILogger<PagSeguroService> _logger;
+        public PagSeguroService(ILogger<PagSeguroService> logger)
         {
             _logger = logger;
         }
 
-        public async Task<PedidoModel> CriarPedido(PedidoModel predido)
+        public async Task<string> GerarPedido(PedidoPagSegModel predido)
         {
             try
             {
                 using var client = new HttpClient();
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://sandbox.api.pagseguro.com/orders");
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "xx");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "A0B2626219B4463787B43E9180EA1477");
 
                 var body = JsonConvert.SerializeObject(predido);
 
@@ -40,8 +40,8 @@ namespace appStore.Services.PagSeguroService
                 if(response.StatusCode == HttpStatusCode.Created)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PedidoModel>(content);
-                    return item;
+                    var teste = content.GetType();
+                    return content;
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace appStore.Services.PagSeguroService
             return null;
         }
 
-        public async Task<PedidoModel> ConsultarPedido(string idPedido)
+        public async Task<PedidoPagSegModel> ConsultarPedido(string idPedido)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace appStore.Services.PagSeguroService
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PedidoModel>(content);
+                    var item = JsonConvert.DeserializeObject<PedidoPagSegModel>(content);
                     return item;
                 }
                 else
@@ -86,7 +86,7 @@ namespace appStore.Services.PagSeguroService
             return null;
         }
 
-        public async Task<PagamentoModel> ConsultarPagamentoPedido(string charge_id)
+        public async Task<PagamentoPagSegModel> ConsultarPagamentoPedido(string charge_id)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace appStore.Services.PagSeguroService
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoModel>(content);
+                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
                     return item;
                 }
                 else
@@ -117,7 +117,7 @@ namespace appStore.Services.PagSeguroService
             return null;
         }
 
-        public async Task<PagamentoModel> GerarPagamentoPedido(PagamentoModel pagamento, string idOrder)
+        public async Task<PagamentoPagSegModel> GerarPagamentoPedido(PagamentoPagSegModel pagamento, string idOrder)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace appStore.Services.PagSeguroService
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoModel>(content);
+                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
                     return item;
                 }
                 else
@@ -150,7 +150,7 @@ namespace appStore.Services.PagSeguroService
             return null;
         }
 
-        public async Task<PagamentoModel> CancelarPagamentoPedido(PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
+        public async Task<PagamentoPagSegModel> CancelarPagamentoPedido(PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace appStore.Services.PagSeguroService
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoModel>(content);
+                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
                     return item;
                 }
                 else

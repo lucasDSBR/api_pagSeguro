@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace appStore.Models
 {
-	public class ProdutoModel
+	public class PedidoCustomerModel
 	{
 		public string name { get; set; }
-		public int quantity { get; set; }
-		public int unit_amount { get; set; }
+		public string email { get; set; }
+		public string tax_id { get; set; }
+		public IEnumerable<PedidoPhoneModel> phones { get; set; }
 
 	}
 }

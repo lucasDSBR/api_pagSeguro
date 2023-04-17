@@ -4,7 +4,7 @@ using appStore.Services.PagSeguroService;
 using appStore.Interfaces.PagSeguroInterfaceService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using appStore.Models.PagamentoModel;
+using appStore.Models.PagamentoPagSegModel;
 
 namespace appStore.Controllers
 {
@@ -25,7 +25,7 @@ namespace appStore.Controllers
         }
 
         [HttpPost("gerarpagamento/{idOrder}")]
-        public IEnumerable<PagamentoModel> Post([FromBody] PagamentoModel pagamento, string idOrder)
+        public IEnumerable<PagamentoPagSegModel> Post([FromBody] PagamentoPagSegModel pagamento, string idOrder)
         {
             try
             {
@@ -34,13 +34,13 @@ namespace appStore.Controllers
             catch (ArgumentException ex)
             {
 
-                return (IEnumerable<PagamentoModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
             }
             return null;
         }
 
         [HttpPost("cancelarpagamento/{charge_id}")]
-        public IEnumerable<PagamentoModel> Post([FromBody] PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
+        public IEnumerable<PagamentoPagSegModel> Post([FromBody] PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
         {
             try
             {
@@ -49,13 +49,13 @@ namespace appStore.Controllers
             catch (ArgumentException ex)
             {
 
-                return (IEnumerable<PagamentoModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
             }
             return null;
         }
 
         [HttpGet("consultarpagamento/{char_id}")]
-        public IEnumerable<PagamentoModel> Get(string charge_id)
+        public IEnumerable<PagamentoPagSegModel> Get(string charge_id)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace appStore.Controllers
             catch (ArgumentException ex)
             {
 
-                return (IEnumerable<PagamentoModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
             }
             return null;
         }
