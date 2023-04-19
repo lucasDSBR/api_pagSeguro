@@ -1,14 +1,14 @@
-﻿using appStore.Interfaces.PagSeguroInterfaceService;
-using appStore.Models.PedidosModel;
-using appStore.Models.PedidosPagSegModel;
-using appStore.Interfaces.PedidosInterfaceRepository;
+﻿using api.Interfaces.PagSeguroInterfaceService;
+using api.Models.PedidosModel;
+using api.Models.PedidosPagSegModel;
+using api.Interfaces.PedidosInterfaceRepository;
 using System.Net;
-using appStore.Context;
-using appStore.Interfaces.UsuariosInterfaceService;
-using appStore.Models.UsuarioModel;
-using appStore.Interfaces.Repository.UsuariosInterfaceRepository;
+using api.Context;
+using api.Interfaces.UsuariosInterfaceService;
+using api.Models.UsuarioModel;
+using api.Interfaces.Repository.UsuariosInterfaceRepository;
 
-namespace appStore.Services.UsuariosService
+namespace api.Services.UsuariosService
 {
     public class UsuariosService : IUsuariosInterfaceService
     {

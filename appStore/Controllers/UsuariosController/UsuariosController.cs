@@ -1,14 +1,14 @@
-﻿using appStore.Models.PedidosModel;
-using appStore.Services;
-using appStore.Services.PagSeguroService;
-using appStore.Interfaces.UsuariosInterfaceService;
+﻿using api.Models.PedidosModel;
+using api.Services;
+using api.Services.PagSeguroService;
+using api.Interfaces.UsuariosInterfaceService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using appStore.Models.PedidosPagSegModel;
-using appStore.Services.UsuariosService;
-using appStore.Models.UsuarioModel;
+using api.Models.PedidosPagSegModel;
+using api.Services.UsuariosService;
+using api.Models.UsuarioModel;
 
-namespace appStore.Controllers
+namespace api.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]

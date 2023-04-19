@@ -1,14 +1,16 @@
-﻿using appStore.Interfaces.PagSeguroInterfaceService;
-using appStore.Interfaces.PedidosInterfaceRepository;
-using appStore.Models.PedidosPagSegModel;
+﻿using api.Interfaces.PagSeguroInterfaceService;
+using api.Interfaces.PedidosInterfaceRepository;
+using api.Models.PedidosPagSegModel;
 using System.Text.Json;
 using System;
 using System.Collections.Generic;
-using appStore.Models.PedidosModel;
+using api.Models.PedidosModel;
 using Newtonsoft.Json;
 using System.Reflection.Metadata;
+using System.Net.Http.Headers;
+using System.Net;
 
-namespace appStore.Services.PedidosService
+namespace api.Services.PedidosService
 {
     public class PedidosService : IPedidosInterfaceService
     {
@@ -25,7 +27,7 @@ namespace appStore.Services.PedidosService
             _pedidosRepository = pedidosRepository;
         }
 
-        public async Task<PedidoPagSegModel> GerarPedido(PedidoPagSegModel predido)
+        public async Task<PedidosModel> GerarPedido(PedidoPagSegModel predido)
         {
             try
             {
@@ -34,13 +36,29 @@ namespace appStore.Services.PedidosService
                 PedidosModel pedido = JsonConvert.DeserializeObject<PedidosModel>(resultPagSeguro.Result);
 
                 _pedidosRepository.GerarPedido(pedido);
+
+                return pedido;
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao realizar registro do pedido");
-                return null;
             }
-            return null;
+        }
+
+        public async Task<PedidosModel> ConsultarPedido(string idPedido)
+        {
+            try
+            {
+                var resultPagSeguro = await _pagSeguroService.ConsultarPedido(idPedido);
+
+                PedidosModel pedido = JsonConvert.DeserializeObject<PedidosModel>(resultPagSeguro);
+
+                return pedido;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao realizar consulta do pedido");
+            }
         }
     }
 }

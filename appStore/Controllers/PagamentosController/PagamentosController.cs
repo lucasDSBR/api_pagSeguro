@@ -1,12 +1,16 @@
-using appStore.Models;
-using appStore.Services;
-using appStore.Services.PagSeguroService;
-using appStore.Interfaces.PagSeguroInterfaceService;
+using api.Models;
+using api.Services;
+using api.Services.PagSeguroService;
+using api.Interfaces.PagSeguroInterfaceService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using appStore.Models.PagamentoPagSegModel;
+using api.Models.PagamentoPagSegModel;
+using api.Interfaces.PagamentosInterfaceService;
+using api.Models.PagamentosModel;
+using api.Models.CancelamentoPagamentoModel;
+using api.Models.ConsultaPagamentoModel;
 
-namespace appStore.Controllers
+namespace api.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
@@ -15,58 +19,56 @@ namespace appStore.Controllers
     {
         private readonly ILogger<PagamentosController> _logger;
         private readonly IPagSerguroInterfaceService _pagSeguroService;
+        private readonly IPagamentosInterfaceService _pagamentosService;
         public PagamentosController(
             ILogger<PagamentosController> logger,
-            IPagSerguroInterfaceService pagSeguroService
+            IPagamentosInterfaceService pagamentosService
            )
         {
             _logger = logger;
-            _pagSeguroService = pagSeguroService;
+            _pagamentosService = pagamentosService;
         }
 
         [HttpPost("gerarpagamento/{idOrder}")]
-        public IEnumerable<PagamentoPagSegModel> Post([FromBody] PagamentoPagSegModel pagamento, string idOrder)
+        public Task<PagamentosModel> Post([FromBody] PagamentoPagSegModel pagamento, string idOrder)
         {
             try
             {
-                var apiPagSeguroCriarPagamento = _pagSeguroService.GerarPagamentoPedido(pagamento, idOrder);
+                var result = _pagamentosService.GerarPagamento(pagamento, idOrder);
+                return result;
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-
-                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                throw new Exception(ex.Message);
             }
-            return null;
         }
 
         [HttpPost("cancelarpagamento/{charge_id}")]
-        public IEnumerable<PagamentoPagSegModel> Post([FromBody] PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
+        public Task<CancelamentoPagamentoModel> Post([FromBody] PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
         {
             try
             {
-                var apiPagSeguroCriarPagamento = _pagSeguroService.CancelarPagamentoPedido(pagamentoAmount, charge_id);
+                var result = _pagamentosService.CancelarPagamento(pagamentoAmount, charge_id);
+                return result;
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-
-                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                throw new Exception(ex.Message);
             }
-            return null;
         }
 
-        [HttpGet("consultarpagamento/{char_id}")]
-        public IEnumerable<PagamentoPagSegModel> Get(string charge_id)
+        [HttpGet("consultarpagamento/{charge_id}")]
+        public Task<ConsultaPagamentoModel> Get(string charge_id)
         {
             try
             {
-                var apiPagSeguroConsultarPagamento = _pagSeguroService.ConsultarPagamentoPedido(charge_id);
+                var result = _pagamentosService.ConsultarPagamento(charge_id);
+                return result;
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-
-                return (IEnumerable<PagamentoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                throw new Exception(ex.Message);
             }
-            return null;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using appStore.Models.PedidosModel;
-namespace appStore.Models
+using api.Models.PedidosModel;
+namespace api.Models
 {
     public class PedidoQrCodeModel
     {

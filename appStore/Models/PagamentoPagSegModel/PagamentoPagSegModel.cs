@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace appStore.Models.PagamentoPagSegModel
+namespace api.Models.PagamentoPagSegModel
 {
     public class PagamentoPagSegModel
     {

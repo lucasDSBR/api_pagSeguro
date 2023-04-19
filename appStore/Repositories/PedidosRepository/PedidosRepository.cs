@@ -1,12 +1,12 @@
-﻿using appStore.Context;
-using appStore.Models.PedidosModel;
-using appStore.Interfaces.PedidosInterfaceRepository;
+﻿using api.Context;
+using api.Models.PedidosModel;
+using api.Interfaces.PedidosInterfaceRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
 
-namespace appStore.Repositories.PedidosRepository
+namespace api.Repositories.PedidosRepository
 {
     public class PedidosRepository : IPedidosInterfaceRepository
     {
@@ -22,7 +22,6 @@ namespace appStore.Repositories.PedidosRepository
         public async Task<bool> GerarPedido(PedidosModel pedido)
         {
 
-
             try
             {
                 _context.Pedidos.Add(pedido);
@@ -30,7 +29,7 @@ namespace appStore.Repositories.PedidosRepository
             }
             catch (ArgumentException ex)
             {
-                _logger.LogError(ex, "Error retrieving user with ID");
+                _logger.LogError(ex, "Error");
                 return false;
             }
 

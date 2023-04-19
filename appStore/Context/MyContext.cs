@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using appStore.Models.PedidosModel;
-using appStore.Models.UsuarioModel;
+using api.Models.PedidosModel;
+using api.Models.UsuarioModel;
 
-namespace appStore.Context
+namespace api.Context
 {
     public class MyContext : DbContext
     {

@@ -3,14 +3,14 @@ using System.Net;
 using System.Net.Http;
 using System;
 using System.Net.Http;
-using appStore.Models.PedidosPagSegModel;
-using appStore.Models.PagamentoPagSegModel;
+using api.Models.PedidosPagSegModel;
+using api.Models.PagamentoPagSegModel;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
-using appStore.Interfaces.PagSeguroInterfaceService;
+using api.Interfaces.PagSeguroInterfaceService;
 
-namespace appStore.Services.PagSeguroService
+namespace api.Services.PagSeguroService
 {
     public class PagSeguroService : IPagSerguroInterfaceService
     {
@@ -18,19 +18,23 @@ namespace appStore.Services.PagSeguroService
 
 
         private readonly ILogger<PagSeguroService> _logger;
-        public PagSeguroService(ILogger<PagSeguroService> logger)
+        private readonly IConfiguration _config;
+        public PagSeguroService(ILogger<PagSeguroService> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
-
+        
         public async Task<string> GerarPedido(PedidoPagSegModel predido)
         {
+            string BearerToken = _config["TokensAcesso:BearerToken"];
+            string EndPoint = _config["EndPoints:ApiPagSeguto"];
             try
             {
                 using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://sandbox.api.pagseguro.com/orders");
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/orders");
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "A0B2626219B4463787B43E9180EA1477");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", $"{BearerToken}");
 
                 var body = JsonConvert.SerializeObject(predido);
 
@@ -39,92 +43,85 @@ namespace appStore.Services.PagSeguroService
                 var response = await client.SendAsync(request);
                 if(response.StatusCode == HttpStatusCode.Created)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var teste = content.GetType();
-                    return content;
+                    return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    throw new Exception("Erro ao tentar criar o pedido");
+                    throw new Exception("Erro ao tentar gerar o pedido");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                throw new Exception("Erro ao tentar gerar o pedido");
             }
-
-            return null;
         }
 
-        public async Task<PedidoPagSegModel> ConsultarPedido(string idPedido)
+        public async Task<string> ConsultarPedido(string idPedido)
         {
+            string BearerToken = _config["TokensAcesso:BearerToken"];
+            string EndPoint = _config["EndPoints:ApiPagSeguto"];
             try
             {
                 using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Get, "https://sandbox.api.pagseguro.com/orders/"+ idPedido);
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{EndPoint}/orders/" + idPedido);
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "xx");
-
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", $"{BearerToken}");
 
                 var response = await client.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PedidoPagSegModel>(content);
-                    return item;
+                    return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    throw new Exception("Erro ao tentar criar o pedido");
+                    throw new Exception("Erro ao tentar consultar pedido...");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                throw new Exception("Erro ao tentar consultar o pedido");
             }
-
-            return null;
         }
 
-        public async Task<PagamentoPagSegModel> ConsultarPagamentoPedido(string charge_id)
+        public async Task<string> ConsultarPagamentoPedido(string charge_id)
         {
+            string BearerToken = _config["TokensAcesso:BearerToken"];
+            string EndPoint = _config["EndPoints:ApiPagSeguto"];
             try
             {
                 using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://sandbox.api.pagseguro.com/charges/{charge_id}");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{EndPoint}/charges/{charge_id}");
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "xx");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", $"{BearerToken}");
 
                 request.Content = new StringContent("", Encoding.UTF8, "application/json");
 
                 var response = await client.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
-                    return item;
+                    return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    throw new Exception("Erro ao tentar criar o pedido");
+                    throw new Exception("Erro ao consultar pagamento");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                throw new Exception("Erro ao consultar pagamento");
             }
-
-            return null;
         }
 
-        public async Task<PagamentoPagSegModel> GerarPagamentoPedido(PagamentoPagSegModel pagamento, string idOrder)
+        public async Task<string> GerarPagamentoPedido(PagamentoPagSegModel pagamento, string idOrder)
         {
+            string BearerToken = _config["TokensAcesso:BearerToken"];
+            string EndPoint = _config["EndPoints:ApiPagSeguto"];
             try
             {
                 using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, $"https://sandbox.api.pagseguro.com/orders/{idOrder}/pay");
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/orders/{idOrder}/pay");
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "xx");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", $"{BearerToken}");
 
                 var body = JsonConvert.SerializeObject(pagamento);
 
@@ -133,31 +130,29 @@ namespace appStore.Services.PagSeguroService
                 var response = await client.SendAsync(request);
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
-                    return item;
+                    return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    throw new Exception("Erro ao tentar criar o pedido");
+                    throw new Exception("Erro ao gerar o pagamento");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                throw new Exception("Erro ao gerar pagamento do pedido");
             }
-
-            return null;
         }
 
-        public async Task<PagamentoPagSegModel> CancelarPagamentoPedido(PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
+        public async Task<string> CancelarPagamento(PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id)
         {
+            string BearerToken = _config["TokensAcesso:BearerToken"];
+            string EndPoint = _config["EndPoints:ApiPagSeguto"];
             try
             {
                 using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, $"https://sandbox.api.pagseguro.com/charges/{charge_id}/cancel");
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{EndPoint}/charges/{charge_id}/cancel");
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "xx");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", $"{BearerToken}");
 
                 var body = JsonConvert.SerializeObject(pagamentoAmount);
 
@@ -166,25 +161,17 @@ namespace appStore.Services.PagSeguroService
                 var response = await client.SendAsync(request);
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var item = JsonConvert.DeserializeObject<PagamentoPagSegModel>(content);
-                    return item;
+                    return await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Erro ao tentar criar o pedido: {content}");
+                    throw new Exception("Erro ao cancelar pagamento");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                throw new Exception("Erro ao cancelar pagamento");
             }
-
-            return null;
         }
-
-
-
     }
 }

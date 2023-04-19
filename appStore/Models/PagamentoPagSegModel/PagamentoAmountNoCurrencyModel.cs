@@ -1,4 +1,4 @@
-﻿namespace appStore.Models.PagamentoPagSegModel
+﻿namespace api.Models.PagamentoPagSegModel
 {
     public class PagamentoAmountNoCurrencyModel
     {

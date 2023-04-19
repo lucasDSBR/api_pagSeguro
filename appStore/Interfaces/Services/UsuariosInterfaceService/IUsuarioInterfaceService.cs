@@ -1,6 +1,6 @@
-﻿using appStore.Models.UsuarioModel;
+﻿using api.Models.UsuarioModel;
 
-namespace appStore.Interfaces.UsuariosInterfaceService
+namespace api.Interfaces.UsuariosInterfaceService
 {
     public interface IUsuariosInterfaceService
     {

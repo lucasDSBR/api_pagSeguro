@@ -1,12 +1,12 @@
-﻿using appStore.Context;
-using appStore.Models.PedidosModel;
-using appStore.Interfaces.Repository.UsuariosInterfaceRepository;
+﻿using api.Context;
+using api.Models.PedidosModel;
+using api.Interfaces.Repository.UsuariosInterfaceRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using appStore.Models.UsuarioModel;
+using api.Models.UsuarioModel;
 
-namespace appStore.Repositories.PedidosRepository
+namespace api.Repositories.PedidosRepository
 {
     public class UsuariosRepository : IUsuariosInterfaceRepository
     {

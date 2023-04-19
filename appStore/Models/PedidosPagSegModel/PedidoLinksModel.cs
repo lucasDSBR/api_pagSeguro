@@ -1,4 +1,4 @@
-﻿namespace appStore.Models.PedidosPagSegModel
+﻿namespace api.Models.PedidosPagSegModel
 {
     public class LinksModel
     {

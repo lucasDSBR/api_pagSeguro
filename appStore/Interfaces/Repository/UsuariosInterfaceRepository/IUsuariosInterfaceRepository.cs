@@ -1,6 +1,6 @@
-﻿using appStore.Models.UsuarioModel;
+﻿using api.Models.UsuarioModel;
 
-namespace appStore.Interfaces.Repository.UsuariosInterfaceRepository
+namespace api.Interfaces.Repository.UsuariosInterfaceRepository
 {
     public interface IUsuariosInterfaceRepository
     {

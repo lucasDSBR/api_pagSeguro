@@ -1,9 +1,9 @@
-﻿using appStore.Models.PedidosModel;
+﻿using api.Models.PedidosModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace appStore.Interfaces.PedidosInterfaceRepository
+namespace api.Interfaces.PedidosInterfaceRepository
 {
     public interface IPedidosInterfaceRepository
     {

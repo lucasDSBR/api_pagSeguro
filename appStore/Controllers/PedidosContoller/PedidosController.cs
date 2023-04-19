@@ -1,12 +1,12 @@
-using appStore.Models.PedidosModel;
-using appStore.Services;
-using appStore.Services.PagSeguroService;
-using appStore.Interfaces.PagSeguroInterfaceService;
+using api.Models.PedidosModel;
+using api.Services;
+using api.Services.PagSeguroService;
+using api.Interfaces.PagSeguroInterfaceService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using appStore.Models.PedidosPagSegModel;
+using api.Models.PedidosPagSegModel;
 
-namespace appStore.Controllers
+namespace api.Controllers
 {
     [ApiController]
 	[Route("/api/[controller]")]
@@ -25,31 +25,31 @@ namespace appStore.Controllers
         }
 
         [HttpGet("consultarpedido/{id}")]
-        public IEnumerable<PedidoPagSegModel> Get(string id)
+        public Task<PedidosModel> Get(string id)
         {
             try
             {
-                //var apiPagSeguroCriar = _pagSeguroService.ConsultarPedido(id);
+                var result = _pedidosService.ConsultarPedido(id);
+                return result;
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
 
-                return (IEnumerable<PedidoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                throw new Exception(ex.Message); //500 Internal Error -- Erro interno do servidor.
             }
-            return null;
         }
 
 		[HttpPost("gerarpedido")]
-        public IEnumerable<PedidoPagSegModel> Post([FromBody] PedidoPagSegModel pedidoData)
+        public Task<PedidosModel> Post([FromBody] PedidoPagSegModel pedidoData)
         {
             try
             {
                 var result = _pedidosService.GerarPedido(pedidoData);
+                return result;
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-
-                return (IEnumerable<PedidoPagSegModel>)StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); //500 Internal Error -- Erro interno do servidor.
+                throw new Exception(ex.Message);
             }
             return null;
         }
