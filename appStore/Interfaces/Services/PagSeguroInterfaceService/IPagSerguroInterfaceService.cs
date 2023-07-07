@@ -1,6 +1,7 @@
 ﻿using api.Models.PedidosModel;
 using api.Models.PagamentoPagSegModel;
 using api.Models.PedidosPagSegModel;
+using api.Models.AdesaoPlanoModel;
 
 namespace api.Interfaces.PagSeguroInterfaceService
 {
@@ -11,5 +12,10 @@ namespace api.Interfaces.PagSeguroInterfaceService
         Task<string> GerarPagamentoPedido(PagamentoPagSegModel pagamento, string idOrder);
         Task<string> ConsultarPagamentoPedido(string charge_id);
         Task<string> CancelarPagamento(PagamentoAmountNoCurrencyModel pagamentoAmount, string charge_id);
+
+        //Métodos abaixo estão relacionados aos planos
+        Task<string> AbrirSessaoPlano();
+        Task<string> ObterTokenCartao(CartaoAdesaoPlanoModel data, string IdSessao);
+        Task<string> AderirAoPlano(AdesaoPlanoModel data);
     }
 }

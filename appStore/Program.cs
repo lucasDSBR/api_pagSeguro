@@ -14,6 +14,8 @@ using api.Services;
 using api.Interfaces.PagamentosInterfaceService;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Schema;
+using api.Interfaces.PlanoInterfaceService;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,18 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "1.0.0",
-        Title = "API",
-        Description = "API de pagamentos via cartão de credito, PIX, Boleto ou transferências. ",
-        Contact = new OpenApiContact
-        {
-            Name = "Lucas Silva",
-            Email = "lucasmaciel6690@gmail.com",
-            Url = new Uri("https://www.linkedin.com/in/lucas-silva82/"),
-        }
-    });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nome do Projeto", Version = "1.0" });
 });
 
 builder.Services.AddDbContext<MyContext>(options =>
@@ -49,6 +40,7 @@ builder.Services.AddScoped<IUsuariosInterfaceService, UsuariosService>();
 builder.Services.AddScoped<IUsuariosInterfaceRepository, UsuariosRepository>();
 builder.Services.AddScoped<IPedidosInterfaceRepository, PedidosRepository>();
 builder.Services.AddScoped<IPagamentosInterfaceService, PagamentosService>();
+builder.Services.AddScoped<IPlanoInterfaceService, PlanoService>();
 
 
 var app = builder.Build();
@@ -57,7 +49,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger.json", "Nome do Projeto");
+        c.RoutePrefix = string.Empty;
+    });
     app.UseDeveloperExceptionPage();
 }
 

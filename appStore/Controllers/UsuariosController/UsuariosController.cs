@@ -7,6 +7,7 @@ using System.Net;
 using api.Models.PedidosPagSegModel;
 using api.Services.UsuariosService;
 using api.Models.UsuarioModel;
+using System.Text;
 
 namespace api.Controllers
 {
@@ -23,7 +24,7 @@ namespace api.Controllers
            )
         {
             _logger = logger;
-            _usuariosService  = usuariosService;
+            _usuariosService = usuariosService;
         }
 
         [HttpGet("consultarusuario/{id}")]
@@ -55,5 +56,29 @@ namespace api.Controllers
             }
             return null;
         }
+        //Caso esteja utilizando controller
+        [HttpPost("/endpointParaReceberInter")]
+        public async Task<IActionResult> webhookInter()
+        {
+            if (Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                Response.ContentType = "application/json";
+                Response.StatusCode = 200;
+
+                string body = string.Empty;
+                using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+                {
+                    body = await reader.ReadToEndAsync();
+                }
+
+                Console.WriteLine(body); //Aqui dá um console do JSON recebido
+
+                //Retornando o JSON
+                return Content(body);
+            }
+
+            return BadRequest();
+        }
     }
 }
+
